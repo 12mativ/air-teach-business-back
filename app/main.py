@@ -1,16 +1,8 @@
-from fastapi import FastAPI, status
-from pydantic import BaseModel
-from datetime import datetime
-from .lecturer import router
-
-class CourseBody(BaseModel):
-  courseDates: dict[str, datetime]
-  courseTheme: str
+from fastapi import FastAPI 
+from .lecturer.router import lecturer_router
+from .schedule.router import schedule_router
 
 app = FastAPI()
 
-app.include_router(router.router)
-
-@app.post("/create-shedule")
-async def create_shedule(body: CourseBody) -> CourseBody:
-  return body
+app.include_router(lecturer_router)
+app.include_router(schedule_router)

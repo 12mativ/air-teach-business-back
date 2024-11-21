@@ -1,7 +1,7 @@
 from fastapi import APIRouter, status
 from pydantic import BaseModel
 
-router = APIRouter(
+lecturer_router = APIRouter(
   prefix="/lecturers",
   tags=["lecturers"]
 )
@@ -14,7 +14,12 @@ class LecturerBody(BaseModel):
 
 lecturer_array: list[LecturerBody] = []
 
-@router.post("/create-lecturer", status_code=status.HTTP_201_CREATED)
+@lecturer_router.post("/create-lecturer", status_code=status.HTTP_201_CREATED)
+async def create_lecturer(body: LecturerBody):
+  lecturer_array.append(body)
+  return {"lecturer": body} 
+
+@lecturer_router.post("/create-lecturer", status_code=status.HTTP_201_CREATED)
 async def create_lecturer(body: LecturerBody):
   lecturer_array.append(body)
   return {"lecturer": body} 
