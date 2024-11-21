@@ -12,16 +12,7 @@ class LecturerBody(BaseModel):
   specialization: str
   description: str
 
-@asynccontextmanager
-async def lifespan(app: FastAPI):
-   await create_tables()
-   print("База готова")
-   yield
-   await delete_tables()
-   print("База очищена")
-
 app = FastAPI()
-
 
 @app.post("/create-shedule")
 async def create_shedule(body: CourseBody) -> CourseBody:
