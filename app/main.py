@@ -4,7 +4,8 @@ from pydantic import BaseModel
 from datetime import datetime, timedelta
 from jose import JWTError, jwt
 from passlib.context import CryptContext
-
+from .lecturer.router import lecturer_router
+from .schedule.router import schedule_router
 from dotenv import load_dotenv
 import os
 
@@ -53,8 +54,11 @@ class UserInDB(User):
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
-app = FastAPI()
+class CourseBody(BaseModel):
+  courseDates: dict[str, datetime]
+  courseTheme: str
 
+app = FastAPI()
 
 def verify_password(plain_password, hashed_password):
     return pwd_context.verify(plain_password, hashed_password)
@@ -150,3 +154,7 @@ async def register_user(user: UserCreate):
     )
     db[user.username] = db_user.dict()
     return db_user
+
+app.include_router(lecturer_router)
+
+app.include_router(schedule_router)
